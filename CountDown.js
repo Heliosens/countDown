@@ -1,8 +1,6 @@
-let CountDown = function (endTime){
+let CountDown = function (){
 
-    this.end = endTime;
-
-    this.section = ["Jour", "Heure", "Minute", "Second"];
+    this.section = ["Heure", "Minute", "Second"];
 
     this.createEnd = function (targetElem, id){
         // create container
@@ -11,16 +9,10 @@ let CountDown = function (endTime){
         container.style.padding = "1rem";
         container.style.display = "flex";
 
-        // create input date
-        let field = document.createElement('input');
-        field.id = "final";
-        field.type = "date";
-
         // create input time
         let frame = document.createElement('div');
         frame.style.width = "50%"
         let newArray = this.section;
-        newArray.shift();
         for(let item of newArray){
             let div = document.createElement('div');
             div.style.width =  (100/this.section.length) + "%";
@@ -34,7 +26,7 @@ let CountDown = function (endTime){
             div.appendChild(box);
             frame.appendChild(div);
         }
-        container.appendChild(field);
+
         container.appendChild(frame);
         targetElem.appendChild(container);
     }

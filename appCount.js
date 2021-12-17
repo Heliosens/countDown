@@ -1,6 +1,6 @@
 let main = document.querySelector('main');
 
-let wayDown = new CountDown("");
+let wayDown = new CountDown();
 
 wayDown.createEnd(main,'testEnd');
 
