@@ -30,7 +30,7 @@ let CountDown = function (targetElem, countId){
             input.style.fontSize = '4rem';
             input.type = 'number';
             input.min = '0';
-            input.value = '59';
+            input.value = '0';
             let span = document.createElement('span');
             span.innerHTML = '0';
             span.style.fontSize = '4rem';
@@ -53,6 +53,9 @@ let CountDown = function (targetElem, countId){
         let elem = document.getElementById(this.countId);
         let input = elem.getElementsByTagName('input');
         let span = elem.getElementsByTagName('span');
+        let countdown;
+        let total = 0;
+        let arrayValue = [0,0,0];
 
         // reset to zero
         let resetBtn = document.createElement('button');
@@ -64,13 +67,9 @@ let CountDown = function (targetElem, countId){
         `;
 
         elem.querySelector("footer").appendChild(resetBtn);
-        resetBtn.addEventListener('click', function (){
-            for (let i = 0 ; i < input.length ; i++){
-                input[i].value = "0";
-                input[i].style.display = "block";
-                span[i].style.display = "none";
-            }
-        });
+
+
+        resetBtn.addEventListener('click', toZero);
 
         // back to value
         let init = document.createElement('button');
@@ -82,12 +81,14 @@ let CountDown = function (targetElem, countId){
         `;
 
         elem.querySelector("footer").appendChild(init);
-        init.addEventListener('click', function (){
-            for (let i = 0 ; i < input.length ; i++){
-                input[i].style.display = 'none';
-                span[i].style.display = 'block';
-                span[i].innerHTML = input[i].value;
-            }
+
+
+
+        init.addEventListener('click', ()=>{
+            // clear interval
+            clearInterval(countdown);
+            backToValue();
+            resume();
         })
 
         // start - stop
@@ -111,21 +112,71 @@ let CountDown = function (targetElem, countId){
         elem.querySelector("footer").appendChild(stop);
 
         start.addEventListener('click', function (){
+            if(!setInterval){
+                console.log('ici');
+            }
+            else {
+                console.log('la');
+                for (let i = 0 ; i < input.length ; i++){
+                    input[i].style.display = 'none';
+                    span[i].style.display = 'block';
+                    arrayValue[i] = parseInt(input[i].value);
+                    span[i].innerHTML = arrayValue[i].toString();
+                }
+                // get value
+                total = parseInt(span[0].innerHTML) * 3600 + parseInt(span[1].innerHTML) * 60 + arrayValue[2];
+                console.log(total);
+                resume();
+            }
+
+            stop.addEventListener('click', function (){
+                // clear interval
+                clearInterval(countdown);
+            })
+        });
+
+        function resume (){
+            // set interval
+            countdown = setInterval(function (){
+                if(total > 0) {
+                    console.log(total);
+                    total--;
+                    let h = Math.trunc(total / 3600);
+                    let m = Math.trunc((total - h * 3600) / 60);
+                    let s = total - (h * 3600) - (m * 60);
+
+                    arrayValue[0] = h;
+                    arrayValue[1] = m;
+                    arrayValue[2] = s;
+
+                    span[0].innerHTML = arrayValue[0].toString();
+                    span[1].innerHTML = arrayValue[1].toString();
+                    span[2].innerHTML = arrayValue[2].toString();
+                }
+                else {
+                    clearInterval(countdown);
+                    backToValue();
+                }
+
+            }, 1000);
+        }
+
+        function backToValue () {
             for (let i = 0 ; i < input.length ; i++){
                 input[i].style.display = 'none';
                 span[i].style.display = 'block';
                 span[i].innerHTML = input[i].value;
             }
-            // actual value
-            let date = new Date();
-            console.log(date);
+        }
 
-
-            stop.addEventListener('click', function (){
-                // clear interval
-            })
-        });
-
+        function toZero () {
+            for (let i = 0 ; i < input.length ; i++){
+                input[i].value = "0";
+                input[i].style.display = "block";
+                span[i].style.display = "none";
+            }
+            clearInterval(countdown);
+        }
     }
 
 }
