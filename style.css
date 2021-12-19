@@ -12,18 +12,10 @@ html {
 body {
     width: 100%;
     font-size: 2rem;
-    text-align: center;
-}
-
-main, #test {
-    display: flex;
 }
 
 main {
-    flex-direction: column;
-    align-items: center;
-}
-
-#testEnd {
-    align-items: center;
+    padding-top: 10vh;
+    display: flex;
+    justify-content: center;
 }

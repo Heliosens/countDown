@@ -1,117 +1,131 @@
 
 // type = ["jour", "Heure", "Minute", "Seconde"]
-let CountDown = function (type){
+let CountDown = function (targetElem, countId){
 
-    this.section = type;
-
-    //todo adapt count down on type
+    this.element = targetElem;
+    this.countId = countId;
+    this.section = ["Heure", "Minute", "Seconde"];
 
     /**
-     *
-     * @param targetElem
-     * @param id
+     * create one frame for each time h,m,s on table
      */
-    this.userTime = function (targetElem, id){
-        // create container
-        let container = document.createElement('div');
-        container.style.display = 'flex';
-        // create input user time
+    this.timeFrames = function (){
         let frame = document.createElement('div');
-        frame.id = id;
+        frame.id = this.countId;
         frame.style.cssText = `
-            border: 1px solid black;
+            border: 2px solid black;
             display: flex;
             justify-content: space-evenly;
+            flex-wrap: wrap;
         `;
-
-        let newArray = ["Heure", "Minute", "Seconde"];
-        for(let item of newArray){
-            let div = document.createElement('div');
-            div.style.width = "30%";
+        // create section
+        for(let item of this.section){
+            let section = document.createElement('section');
+            section.style.display = 'flex';
+            section.style.flexDirection = 'column';
+            section.style.width = '8vw';
+            let p = document.createElement('p');
+            p.innerHTML = item;
+            let input = document.createElement('input');
+            input.style.fontSize = '4rem';
+            input.type = 'number';
+            input.min = '0';
+            input.value = '59';
             let span = document.createElement('span');
-            span.innerHTML = item;
-            let box = document.createElement('input');
-            box.type = 'number';
-            box.value = '0';
-            box.min = '0';
-            box.style.cssText = `
-                width: 8rem;
-                font-size: 4rem;
-                text-align: center;
-                padding-left: .5rem;
-            `;
-
-            div.appendChild(span);
-            div.appendChild(box);
-            frame.appendChild(div);
+            span.innerHTML = '0';
+            span.style.fontSize = '4rem';
+            span.style.border = "1px solid black";
+            // span.style.display = 'none';
+            frame.appendChild(section);
+            section.appendChild(p);
+            section.appendChild(input);
+            section.appendChild(span);
         }
-
-        // create reset btn
-        let resetBtn = document.createElement('button');
-        resetBtn.innerText = "reset";
-        resetBtn.style.fontSize = "2rem";
-
-        targetElem.appendChild(container).appendChild(frame);
-        container.appendChild(resetBtn);
+        let footer = document.createElement('footer');
+        footer.style.flexBasis = '80%';
+        footer.style.padding = '.5rem';
+        footer.style.textAlign = 'center';
+        frame.appendChild(footer);
+        this.element.appendChild(frame);
     }
 
-    this.reset = function (id){
-        let elem = document.getElementById(id);
-        let btn = elem.parentElement.querySelector('button');
+    this.commandBtn = function (){
+        let elem = document.getElementById(this.countId);
         let input = elem.getElementsByTagName('input');
+        let span = elem.getElementsByTagName('span');
 
-        btn.addEventListener('click', function (){
-            for (let item of input){
-                item.value = "0";
+        // reset to zero
+        let resetBtn = document.createElement('button');
+        resetBtn.innerText = 'Reset';
+        resetBtn.style.cssText = `
+            font-size: 1.8rem;
+            padding: .5rem;
+            margin: 0 2px;
+        `;
+
+        elem.querySelector("footer").appendChild(resetBtn);
+        resetBtn.addEventListener('click', function (){
+            for (let i = 0 ; i < input.length ; i++){
+                input[i].value = "0";
+                input[i].style.display = "block";
+                span[i].style.display = "none";
+            }
+        });
+
+        // back to value
+        let init = document.createElement('button');
+        init.innerText = 'Restart';
+        init.style.cssText = `
+            font-size: 1.8rem;
+            padding: .5rem;
+            margin: 0 2px;
+        `;
+
+        elem.querySelector("footer").appendChild(init);
+        init.addEventListener('click', function (){
+            for (let i = 0 ; i < input.length ; i++){
+                input[i].style.display = 'none';
+                span[i].style.display = 'block';
+                span[i].innerHTML = input[i].value;
             }
         })
-    }
 
-    /**
-     * number = day + hour + min + sec
-     * @param targetElem
-     * @param w
-     * @param h
-     * @param id
-     */
-    this.createFrame = function (targetElem, w, h, id){
-        // create container
-        let frame = document.createElement('div');
-        frame.style.cssText = `
-            padding: 1rem;
-            border: 1px solid black;
-            text-align: center;
+        // start - stop
+        let start = document.createElement('button');
+        start.innerText = "Start";
+        start.style.cssText = `
+            font-size: 1.8rem;
+            padding: .5rem;
+            margin: 0 2px;
         `;
-        frame.id = id;
-        frame.style.width = w;
 
-        // create each number frame
-        for(let item of this.section){
-            let box = document.createElement('div');
+        let stop = document.createElement('button');
+        stop.innerText = 'Stop';
+        stop.style.cssText = `
+            font-size: 1.8rem;
+            padding: .5rem;
+            margin: 0 2px;
+        `;
 
-            box.style.width = (100/this.section.length) + "%";
-            box.style.height = h;
-            box.style.border = "1px dashed black";
-            box.style.margin = "1px";
-            box.innerHTML = item;
-            frame.appendChild(box);
-        }
-        targetElem.appendChild(frame);
+        elem.querySelector("footer").appendChild(start);
+        elem.querySelector("footer").appendChild(stop);
 
-        let start = document.createElement('input');
-        start.type = "button";
-        start.value = "Start";
-        start.className = "startBtn";
-        start.style.padding = '1vh 2vw';
-        targetElem.appendChild(start);
+        start.addEventListener('click', function (){
+            for (let i = 0 ; i < input.length ; i++){
+                input[i].style.display = 'none';
+                span[i].style.display = 'block';
+                span[i].innerHTML = input[i].value;
+            }
+            // actual value
+            let date = new Date();
+            console.log(date);
+
+
+            stop.addEventListener('click', function (){
+                // clear interval
+            })
+        });
+
     }
-
-    this.goDown = function (){
-        let date = new Date();
-        console.log(date);
-        let final = document.getElementById('final');
-
-    }
-
 
 }
