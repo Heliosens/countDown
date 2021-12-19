@@ -11,16 +11,19 @@ html {
 
 body {
     width: 100%;
-    font-size: 1.5rem;
+    font-size: 2rem;
     text-align: center;
 }
 
-main, #testEnd, #testEnd div, #test {
+main, #test {
     display: flex;
 }
 
-main, #testEnd, #testEnd div div {
+main {
     flex-direction: column;
     align-items: center;
 }
 
+#testEnd {
+    align-items: center;
+}
