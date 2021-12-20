@@ -55,7 +55,6 @@ let CountDown = function (targetElem, countId){
         let span = elem.getElementsByTagName('span');
         let countdown;
         let total = 0;
-        let arrayValue = [0,0,0];
         let nbrStart = 0;
 
         // reset to zero
@@ -82,8 +81,6 @@ let CountDown = function (targetElem, countId){
         `;
 
         elem.querySelector("footer").appendChild(init);
-
-
 
         init.addEventListener('click', ()=>{
             // clear interval
@@ -123,19 +120,20 @@ let CountDown = function (targetElem, countId){
                 nbrStart++;
             }
 
-            // get value
-            total = parseInt(span[0].innerHTML) * 3600 + parseInt(span[1].innerHTML) * 60 + parseInt(span[2].innerHTML);
-            console.log(total);
-
             resume();
 
             stop.addEventListener('click', function (){
                 // clear interval
                 clearInterval(countdown);
             })
+
+
         });
 
         function resume (){
+            // get value
+            total = parseInt(span[0].innerHTML) * 3600 + parseInt(span[1].innerHTML) * 60 + parseInt(span[2].innerHTML);
+            console.log(total);
             // set interval
             countdown = setInterval(function (){
                 if(total > 0) {
@@ -158,6 +156,7 @@ let CountDown = function (targetElem, countId){
         }
 
         function backToValue () {
+            clearInterval(countdown);
             for (let i = 0 ; i < input.length ; i++){
                 input[i].style.display = 'none';
                 span[i].style.display = 'block';
@@ -166,12 +165,13 @@ let CountDown = function (targetElem, countId){
         }
 
         function toZero () {
+            clearInterval(countdown);
             for (let i = 0 ; i < input.length ; i++){
                 input[i].value = "0";
                 input[i].style.display = "block";
                 span[i].style.display = "none";
             }
-            clearInterval(countdown);
+            nbrStart = 0;
         }
     }
 
