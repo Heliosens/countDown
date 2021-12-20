@@ -35,7 +35,7 @@ let CountDown = function (targetElem, countId){
             span.innerHTML = '0';
             span.style.fontSize = '4rem';
             span.style.border = "1px solid black";
-            // span.style.display = 'none';
+            span.style.display = 'none';
             frame.appendChild(section);
             section.appendChild(p);
             section.appendChild(input);
@@ -56,6 +56,7 @@ let CountDown = function (targetElem, countId){
         let countdown;
         let total = 0;
         let arrayValue = [0,0,0];
+        let nbrStart = 0;
 
         // reset to zero
         let resetBtn = document.createElement('button');
@@ -112,22 +113,21 @@ let CountDown = function (targetElem, countId){
         elem.querySelector("footer").appendChild(stop);
 
         start.addEventListener('click', function (){
-            if(!setInterval){
-                console.log('ici');
-            }
-            else {
-                console.log('la');
+
+            if(nbrStart === 0){
                 for (let i = 0 ; i < input.length ; i++){
                     input[i].style.display = 'none';
                     span[i].style.display = 'block';
-                    arrayValue[i] = parseInt(input[i].value);
-                    span[i].innerHTML = arrayValue[i].toString();
+                    span[i].innerHTML = parseInt(input[i].value).toString();
                 }
-                // get value
-                total = parseInt(span[0].innerHTML) * 3600 + parseInt(span[1].innerHTML) * 60 + arrayValue[2];
-                console.log(total);
-                resume();
+                nbrStart++;
             }
+
+            // get value
+            total = parseInt(span[0].innerHTML) * 3600 + parseInt(span[1].innerHTML) * 60 + parseInt(span[2].innerHTML);
+            console.log(total);
+
+            resume();
 
             stop.addEventListener('click', function (){
                 // clear interval
@@ -145,13 +145,9 @@ let CountDown = function (targetElem, countId){
                     let m = Math.trunc((total - h * 3600) / 60);
                     let s = total - (h * 3600) - (m * 60);
 
-                    arrayValue[0] = h;
-                    arrayValue[1] = m;
-                    arrayValue[2] = s;
-
-                    span[0].innerHTML = arrayValue[0].toString();
-                    span[1].innerHTML = arrayValue[1].toString();
-                    span[2].innerHTML = arrayValue[2].toString();
+                    span[0].innerHTML = h.toString();
+                    span[1].innerHTML = m.toString();
+                    span[2].innerHTML = s.toString();
                 }
                 else {
                     clearInterval(countdown);
